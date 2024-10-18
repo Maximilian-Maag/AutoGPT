@@ -299,10 +299,8 @@ services:
       interval: 5s
       retries: 10
     restart: unless-stopped
-    depends_on:
-      db:
         # Disable this if you are using an external Postgres database
-        condition: service_healthy
+        #condition: service_healthy
     # Uncomment to use Big Query backend for analytics
     # volumes:
     #   - type: bind
@@ -321,8 +319,6 @@ services:
       LOGFLARE_SINGLE_TENANT: true
       LOGFLARE_SUPABASE_MODE: true
       LOGFLARE_MIN_CLUSTER_SIZE: 1
-
-      # Comment variables to use Big Query backend for analytics
       POSTGRES_BACKEND_URL: postgresql://supabase_admin:${SPB_POSTGRES_PASSWORD}@${SPB_POSTGRES_HOST}:${SPB_POSTGRES_PORT}/${SPB_POSTGRES_DB}
       POSTGRES_BACKEND_SCHEMA: _analytics
       LOGFLARE_FEATURE_FLAG_OVERRIDE: multibackend=true
@@ -355,11 +351,11 @@ services:
       # Pass down internal port because it's set dynamically by other services
       - ${SPB_POSTGRES_PORT}:${SPB_POSTGRES_PORT}
     environment:
+      POSTGRESQL_USERNAME: supabase_admin
       POSTGRES_HOST: /var/run/postgresql
       PGPORT: ${SPB_POSTGRES_PORT}
       POSTGRES_PORT: ${SPB_POSTGRES_PORT}
-      PGPASSWORD: ${SPB_POSTGRES_PASSWORD}
-      POSTGRES_PASSWORD: ${SPB_POSTGRES_PASSWORD}
+      POSTGRESQL_PASSWORD: ${SPB_POSTGRES_PASSWORD}
       PGDATABASE: ${SPB_POSTGRES_DB}
       POSTGRES_DB: ${SPB_POSTGRES_DB}
       JWT_SECRET: ${SPB_JWT_SECRET}
